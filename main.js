@@ -93,7 +93,7 @@ function initMainWindow(trayImage) {
 function makeTray() {
 
   // Default tray image + icon
-  let trayImage = path.join(__dirname, 'src/assets/icons/logo.png');
+  let trayImage = path.join(__dirname, 'resources/logo.png');
 
   // Determine appropriate icon for platform
   // if (platform === 'darwin') {
