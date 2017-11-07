@@ -1,10 +1,11 @@
-sudo: required
-dist: trusty
-language: node_js
-node_js:
-  - '6.11'
+osx_image: xcode8.3
 
-addons:
+dist: trusty
+sudo: false
+
+language: node_js
+node_js: "8"
+
 apt:
   sources:
     - google-chrome
@@ -14,7 +15,24 @@ apt:
     - icnsutils
     - graphicsmagick
 
+env:
+  global:
+    - ELECTRON_CACHE=$HOME/.cache/electron
+    - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+
+os:
+  - linux
+  - osx
+
+cache:
+  directories:
+  - node_modules
+  - $HOME/.cache/electron
+  - $HOME/.cache/electron-builder
+  - $HOME/.npm/_prebuilds
+
 before_install:
+  - mkdir -p /tmp/git-lfs && curl -L https://github.com/github/git-lfs/releases/download/v2.2.0/git-lfs-$([ "$TRAVIS_OS_NAME" == "linux" ] && echo "linux" || echo "darwin")-amd64-2.2.0.tar.gz | tar -xz -C /tmp/git-lfs --strip-components 1 && /tmp/git-lfs/git-lfs pull
   - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
@@ -24,6 +42,7 @@ before_script:
   - npm install
 
 script:
+
   - echo 'Build Dist' && echo -en 'travis_fold:start:script.build\\r'
 
   - ng build --base-href="./"
@@ -50,7 +69,12 @@ script:
 
   - echo -en 'travis_fold:end:script.dist\\r'
 
-# Disable coveralls for now
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run package:linux; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run package:win && npm run package:mac; fi
+
+before_cache:
+  - rm -rf $HOME/.cache/electron-builder/wine
+
 after_script:
   - npm run coveralls
 
