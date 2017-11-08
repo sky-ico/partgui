@@ -52,12 +52,15 @@ script:
 
   - npm run lint
 
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+  - then
   - echo -en 'travis_fold:end:script.lint\\r'
   - echo 'Test Codebase' && echo -en 'travis_fold:start:script.test\\r'
 
   - ng test --single-run --code-coverage
 
   - echo -en 'travis_fold:end:script.test\\r'
+  - fi
   - echo 'Package Dist' && echo -en 'travis_fold:start:script.dist\\r'
 
   - cd dist
