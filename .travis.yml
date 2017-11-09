@@ -52,25 +52,23 @@ script:
 
   - npm run lint
 
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]
-  - then
-  - echo -en 'travis_fold:end:script.lint\\r'
-  - echo 'Test Codebase' && echo -en 'travis_fold:start:script.test\\r'
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo -en 'travis_fold:end:script.lint\\r'; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo 'Test Codebase' && echo -en 'travis_fold:start:script.test\\r'; fi
 
-  - ng test --single-run --code-coverage
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ng test --single-run --code-coverage; fi
 
-  - echo -en 'travis_fold:end:script.test\\r'
-  - fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo -en 'travis_fold:end:script.test\\r'; fi
+
   - echo 'Package Dist' && echo -en 'travis_fold:start:script.dist\\r'
 
-  - cd dist
-  - zip -r $TRAVIS_BUILD_DIR/dist.zip *
+#  - cd dist
+#  - zip -r $TRAVIS_BUILD_DIR/dist.zip *
 
-  - cd $TRAVIS_BUILD_DIR
-  - sha256sum $TRAVIS_BUILD_DIR/dist.zip > $TRAVIS_BUILD_DIR/dist.zip.sha256sum.txt
-  - cat $TRAVIS_BUILD_DIR/dist.zip.sha256sum.txt
+#  - cd $TRAVIS_BUILD_DIR
+#  - sha256sum $TRAVIS_BUILD_DIR/dist.zip > $TRAVIS_BUILD_DIR/dist.zip.sha256sum.txt
+#  - cat $TRAVIS_BUILD_DIR/dist.zip.sha256sum.txt
 
-  - echo -en 'travis_fold:end:script.dist\\r'
+#  - echo -en 'travis_fold:end:script.dist\\r'
 
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run package:linux; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run package:win && npm run package:mac; fi
