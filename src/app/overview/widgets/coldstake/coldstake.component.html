@@ -39,7 +39,7 @@
 
 
   <!-- if cold staking is under 100% progress -->
-  <md-card *ngIf="coldStakingEnabled" class="staking-node">
+  <md-card *ngIf="coldStakingEnabled && coldstakeProgress < 100" class="staking-node">
     <div class="title">
       Cold Staking Progress <span class="status active">{{coldstakeProgress}}%</span>
     </div>
@@ -57,18 +57,19 @@
   </md-card>
 
 
-  <!-- if Cold staking is at 100% show Disable button etc.
-  <md-card *ngIf="????" class="staking-node">
+  <md-card *ngIf="coldStakingEnabled && coldstakeProgress === 100" class="staking-node">
     <div class="title">
-      Cold Staking Node <span class="status inactive">active</span>
+      Cold Staking Node <span class="status active">active</span>
     </div>
-    <button class="mat-raised-button mat-primary pull-left" (click)="??????" mdTooltip="Disable Cold Staking">
+    <button class="mat-raised-button mat-primary pull-left" mdTooltip="Disable Cold Staking" disabled>
       <md-icon fontSet="partIcon" fontIcon="part-simple-delete"></md-icon>
     </button>
   </md-card>
   <p class="widget-help">
     You can now turn of this wallet as cold staking is fully activated.
-  </p-->
+  </p>
+
+
 
 
 </div><!-- .cold-staking -->
